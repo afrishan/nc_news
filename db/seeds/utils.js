@@ -49,7 +49,7 @@ exports.formatUsersData = (data) => {
 
 exports.formatArticlesData = (data) => {
   return data.map((article) => {
-    return [article.title, article.body, article.topic, article.author, article.created_at, article.article_img_url]  
+    return [article.title, article.body, article.topic, article.author, article.created_at, article.article_img_url, article.votes]  
   })
 }
 

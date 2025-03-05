@@ -266,6 +266,7 @@ describe("mapping functions", ()=>{
       title: 'Eight pug gifs that remind me of mitch',
       topic: 'mitch',
       author: 'icellusedkars',
+      votes: 12,
       body: 'some gifs',
       article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
     },
@@ -274,6 +275,7 @@ describe("mapping functions", ()=>{
       title: 'Student SUES Mitch!',
       topic: 'mitch',
       author: 'rogersop',
+      votes: 8,
       body: 'We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages',
       article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
     }]
@@ -284,7 +286,8 @@ describe("mapping functions", ()=>{
         'mitch',
         'icellusedkars',
         '2020-11-03T09:12:00.000Z',
-        'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
+        'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700',
+        12
       ],
       [
         'Student SUES Mitch!',
@@ -292,7 +295,8 @@ describe("mapping functions", ()=>{
         'mitch',
         'rogersop',
         '2020-05-06T02:14:00.000Z',
-        'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
+        'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700',
+        8
       ]
     ]
     const result = formatArticlesData(input)
