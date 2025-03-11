@@ -1,7 +1,7 @@
 
 const endpoints = require("../endpoints.json")
 
-const getAllApis = (request, response)=>{
+const getAllApis = (request, response, next)=>{
 response.status(200).send({endpoints})
 }
 
