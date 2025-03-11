@@ -1,4 +1,4 @@
-const app = require("../app")
+
 const { retrieveAllTopics } = require("../models/topics.models")
 
 const getAllTopics = (request, response, next) =>{

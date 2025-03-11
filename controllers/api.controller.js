@@ -1,4 +1,4 @@
-const app = require("../app")
+
 const endpoints = require("../endpoints.json")
 
 const getAllApis = (request, response, next)=>{
