@@ -4,16 +4,17 @@ const getAllApis = require("./controllers/api.controller")
 
 const { getAllTopics } = require("./controllers/topics.controllers");
 const { getArticleByArticleId, getAllArticles } = require("./controllers/articles.controllers");
-const { getAllCommentsByArticleId } = require("./controllers/comments.controllers");
+const { getAllCommentsByArticleId, postACommentByArticleId } = require("./controllers/comments.controllers");
 ;
 
-
+app.use(express.json())
 
 app.get(`/api`, getAllApis);
 app.get(`/api/topics`, getAllTopics);
 app.get(`/api/articles/:article_id`, getArticleByArticleId)
 app.get(`/api/articles`, getAllArticles)
 app.get(`/api/articles/:article_id/comments`, getAllCommentsByArticleId)
+app.post(`/api/articles/:article_id/comments`, postACommentByArticleId)
 
 
 app.all("*", (request, response) => {
