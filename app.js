@@ -3,13 +3,15 @@ const app = express()
 const getAllApis = require("./controllers/api.controller")
 
 const { getAllTopics } = require("./controllers/topics.controllers");
-const { getArticleByArticleId } = require("./controllers/articles.controllers");
+const { getArticleByArticleId, getAllArticles } = require("./controllers/articles.controllers");
+;
 
 
 
 app.get(`/api`, getAllApis);
 app.get(`/api/topics`, getAllTopics);
 app.get(`/api/articles/:article_id`, getArticleByArticleId)
+app.get(`/api/articles`, getAllArticles)
 
 
 app.all("*", (request, response) => {
@@ -30,3 +32,5 @@ app.all("*", (request, response) => {
     }
     next(err);
   });
+
+  module.exports = app

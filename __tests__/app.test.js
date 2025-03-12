@@ -96,3 +96,31 @@ describe("GET /api/articles/:article_id", () => {
           expect(body.msg).toBe("not found");
         });
       })
+    })
+
+    describe("GET /api/articles", () =>{
+      test("200: Responds with an array of all article objects",()=>{
+        return request(app)
+        .get(`/api/articles`)
+        .expect(200)
+        .then(({body})=>{
+          const articles = body.articles
+          expect(articles.length).toBe(13)
+          expect(articles).toBeSortedBy('created_at', {
+            descending: true,
+          });
+
+          articles.forEach((article)=>{
+            expect(article).toHaveProperty("author")
+            expect(article).toHaveProperty("title")
+            expect(article).toHaveProperty("article_id")
+            expect(article).toHaveProperty("topic")
+            expect(article).not.toHaveProperty("body")
+            expect(article).toHaveProperty("created_at")
+            expect(article).toHaveProperty("votes")
+            expect(article).toHaveProperty("article_img_url")
+            expect(article).toHaveProperty("comment_count")
+          })
+        })
+      })
+    })
