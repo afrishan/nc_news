@@ -124,3 +124,46 @@ describe("GET /api/articles/:article_id", () => {
         })
       })
     })
+
+    describe(" GET /api/articles/:article_id/comments", ()=>{
+      test("200: Responds with an array of comments for the given article_id",()=>{
+        return request(app)
+        .get(`/api/articles/1/comments`)
+        .expect(200)
+        .then(({body})=>{
+          const comments = body.comments
+
+          expect(comments.length).toBe(11)
+          comments.forEach((comment)=>{
+            expect(comment).toHaveProperty("comment_id")
+            expect(typeof comment.comment_id).toBe("number")
+            expect(comment).toHaveProperty("votes")
+            expect(typeof comment.votes).toBe("number")
+            expect(comment).toHaveProperty("created_at")
+            expect(typeof comment.created_at).toBe("string")
+            expect(comment).toHaveProperty("author")
+            expect(typeof comment.author).toBe("string")
+            expect(comment).toHaveProperty("body")
+            expect(typeof comment.body).toBe("string")
+            expect(comment).toHaveProperty("article_id")
+            expect(typeof comment.article_id).toBe("number")
+          })
+        })
+      })
+      test("GET 400: responds with bad request", () => {
+        return request(app)
+          .get("/api/articles/notanumber/comments")
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).toBe("bad request");
+          })
+      })
+      test("GET 404: responds with 'not found' ", () => {
+        return request(app)
+          .get("/api/articles/900/comments")
+          .expect(404)
+          .then(({ body }) => {
+            expect(body.msg).toBe("not found");
+          });
+        })
+    })
