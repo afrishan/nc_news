@@ -1,12 +1,13 @@
 const db = require("../db/connection")
 
-retrieveAllCommentsByArticleId = (id)=> {
+const retrieveAllCommentsByArticleId = (id)=> {
     return db.query(
         `SELECT * 
         FROM comments
         WHERE article_id = $1`, [id]
     )
     .then(({rows})=>{
+        console.log(rows)
         if (rows.length === 0){
             return Promise.reject({ code: 404, msg: "not found" })
         }
@@ -15,4 +16,19 @@ retrieveAllCommentsByArticleId = (id)=> {
 
 }
 
-module.exports ={retrieveAllCommentsByArticleId}
+const addNewCommentbyArticleId = (username, body, id)=>{
+
+if(username === undefined || body === undefined) {
+    return Promise.reject({code:400, msg:"bad request"})
+}
+    return db.query(
+        `INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *`,
+        [username, body, id]
+    ).then(({rows})=>{
+        console.log(rows)
+    return rows[0]
+    })
+
+}
+
+module.exports ={retrieveAllCommentsByArticleId, addNewCommentbyArticleId}

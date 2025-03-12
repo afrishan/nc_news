@@ -1,4 +1,4 @@
-const { retrieveAllCommentsByArticleId } = require("../models/comments.models")
+const { retrieveAllCommentsByArticleId, addNewCommentbyArticleId } = require("../models/comments.models")
 
 const getAllCommentsByArticleId = (request, response, next)=>{
 const id = request.params.article_id
@@ -8,6 +8,19 @@ retrieveAllCommentsByArticleId(id).then((comments)=>{
 }).catch((err)=>{
     next(err)
 })
-
 }
-module.exports = {getAllCommentsByArticleId}
+
+const postACommentByArticleId = (request, response, next)=>{
+const {username, body} = request.body
+const id = request.params.article_id
+
+addNewCommentbyArticleId(username, body, id)
+.then((comment)=>{
+response.status(201).send({comment})
+})
+.catch((err)=>{
+    next(err)
+})
+}
+
+module.exports = {getAllCommentsByArticleId, postACommentByArticleId}

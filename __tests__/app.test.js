@@ -167,3 +167,48 @@ describe("GET /api/articles/:article_id", () => {
           });
         })
     })
+
+    describe("POST /api/articles/:article_id/comments", ()=>{
+      test("201: Responds with the new comment that was posted on the article with the input article_id ",()=>{
+        return request(app)
+        .post(`/api/articles/2/comments`)
+        .send({username: "butter_bridge", body: "Great read, but i do have a few points..."})
+        .expect(201)
+        .then(({body})=>{
+          const comment = body.comment
+          expect(comment.comment_id).toBe(19)
+          expect(comment.author).toBe("butter_bridge")
+          expect(comment.body).toBe("Great read, but i do have a few points...")
+          expect(comment.article_id).toBe(2)
+          expect(comment).toHaveProperty("created_at")
+          expect(comment.votes).toBe(0)
+
+        })
+      })
+      test("POST 400: responds with bad request article_id is invalid ", () => {
+        return request(app)
+        .post(`/api/articles/notANumber/comments`)
+        .send({name: "butter_bridge", title: "Great read, but i do have a few points..."})
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).toBe("bad request");
+          })
+      })
+      test("POST 404: responds with 'not found' when the article_id is not in the database ", () => {
+        return request(app)
+          .get("/api/articles/900/comments")
+          .expect(404)
+          .then(({ body }) => {
+            expect(body.msg).toBe("not found");
+          });
+        })
+      test("POST 400: responds with bad request when the response body doesn't contain the correct fields of username and body ", () => {
+        return request(app)
+        .post(`/api/articles/2/comments`)
+        .send({name: "butter_bridge", title: "Great read, but i do have a few points..."})
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).toBe("bad request");
+          })
+      })
+    })

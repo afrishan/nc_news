@@ -63,7 +63,7 @@ function createArticles(){
   return db.query(`CREATE TABLE articles (article_id SERIAL PRIMARY KEY, title VARCHAR(100), topic VARCHAR(100) NOT NULL, CONSTRAINT fk_topic FOREIGN KEY (topic) REFERENCES topics(slug), author VARCHAR(100) NOT NULL, CONSTRAINT fk_author FOREIGN KEY (author) REFERENCES users(username), body TEXT, created_at TIMESTAMP, votes INT DEFAULT 0, article_img_url VARCHAR(1000))`)
 }
 function createComments(){
-  return db.query(`CREATE TABLE comments  (comment_id SERIAL PRIMARY KEY, article_id INT NOT NULL, CONSTRAINT fk_article_id FOREIGN KEY (article_id) REFERENCES articles(article_id), body TEXT, author VARCHAR(100) NOT NULL, CONSTRAINT fk_author FOREIGN KEY (author) REFERENCES users(username), votes INT DEFAULT 0, created_at TIMESTAMP)`)
+  return db.query(`CREATE TABLE comments  (comment_id SERIAL PRIMARY KEY, article_id INT NOT NULL, CONSTRAINT fk_article_id FOREIGN KEY (article_id) REFERENCES articles(article_id), body TEXT, author VARCHAR(100) NOT NULL, CONSTRAINT fk_author FOREIGN KEY (author) REFERENCES users(username), votes INT DEFAULT 0, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`)
 }
 
 
