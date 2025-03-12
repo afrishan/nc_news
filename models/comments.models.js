@@ -7,7 +7,6 @@ const retrieveAllCommentsByArticleId = (id)=> {
         WHERE article_id = $1`, [id]
     )
     .then(({rows})=>{
-        console.log(rows)
         if (rows.length === 0){
             return Promise.reject({ code: 404, msg: "not found" })
         }
@@ -25,7 +24,6 @@ if(username === undefined || body === undefined) {
         `INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *`,
         [username, body, id]
     ).then(({rows})=>{
-        console.log(rows)
     return rows[0]
     })
 

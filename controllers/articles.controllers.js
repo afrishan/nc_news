@@ -1,7 +1,7 @@
 
 const { get } = require("../app")
 const articles = require("../db/data/test-data/articles")
-const { retrieveArticleByArticleId, retreiveAllArticles } = require("../models/articles.models")
+const { retrieveArticleByArticleId, retreiveAllArticles, updateArticleByArticleId } = require("../models/articles.models")
 
 
 const getArticleByArticleId = (request, response, next) =>{
@@ -22,4 +22,15 @@ const getAllArticles = (request, response, next) =>{
     next(err)
 })
 }
-module.exports = {getArticleByArticleId, getAllArticles}
+
+const patchArticleByArticleId = (request, response, next) =>{
+const id = request.params.article_id
+const {inc_votes} = request.body
+
+    updateArticleByArticleId(inc_votes, id).then((article)=>{
+        response.status(200).send({article})
+    }).catch((err)=>{
+        next(err)
+    })
+}
+module.exports = {getArticleByArticleId, getAllArticles, patchArticleByArticleId}

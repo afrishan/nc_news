@@ -125,6 +125,78 @@ describe("GET /api/articles/:article_id", () => {
       })
     })
 
+    describe("PATCH /api/articles/:article_id", ()=>{
+      test("200: Responds with an updated vote count on the article object at the given article_id", ()=>{ return request(app)
+        .patch("/api/articles/5")
+        .send({ inc_votes: 2 })
+        .expect(200)
+        .then(({body})=>{
+          const article = body.article
+          expect(article.author).toBe("rogersop")
+          expect(article.title).toBe("UNCOVERED: catspiracy to bring down democracy")
+          expect(article.topic).toBe("cats")
+          expect(article.created_at).toBe("2020-08-03T13:14:00.000Z")
+          expect(article.body).toBe("Bastet walks amongst us, and the cats are taking arms!")
+          expect(article.votes).toBe(2)
+          expect(article.article_img_url).toBe("https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700")
+
+        })
+      })
+      test("200: Responds with an updated vote count on the article object at the given article_id", ()=>{ return request(app)
+        .patch("/api/articles/1")
+        .send({ inc_votes: -80 })
+        .expect(200)
+        .then(({body})=>{
+          const article = body.article
+          expect(article.author).toBe("butter_bridge")
+          expect(article.title).toBe("Living in the shadow of a great man")
+          expect(article.topic).toBe("mitch")
+          expect(article.created_at).toBe("2020-07-09T20:11:00.000Z")
+          expect(article.body).toBe("I find this existence challenging")
+          expect(article.votes).toBe(20)
+          expect(article.article_img_url).toBe("https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700")
+
+        })
+      })
+      test("PATCH 404: responds with 'not found' when the article_id is not in the database ", () => {
+        return request(app)
+          .patch("/api/articles/900")
+          .send({inc_votes: 4})
+          .expect(404)
+          .then(({ body }) => {
+            expect(body.msg).toBe("not found");
+          });
+        })
+        test("PATCH 400: responds with 'bad request' when the article_id is invalid ", () => {
+          return request(app)
+            .patch("/api/articles/NotANumber")
+            .send({inc_votes: 2 })
+            .expect(400)
+            .then(({ body }) => {
+              expect(body.msg).toBe("bad request");
+            });
+          })
+      test("PATCH 400: responds with bad request when the response body doesn't contain the correct field of inc_votes ", () => {
+        return request(app)
+        .patch(`/api/articles/5`)
+        .send({ vote: 2 })
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).toBe("bad request");
+          })
+      })
+      test("PATCH 400: responds with bad request when the value field in the response body doesn't have the right format ", () => {
+        return request(app)
+        .patch(`/api/articles/5`)
+        .send({ vote: "two" })
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).toBe("bad request");
+          })
+      })
+    })
+  
+
     describe(" GET /api/articles/:article_id/comments", ()=>{
       test("200: Responds with an array of comments for the given article_id",()=>{
         return request(app)
