@@ -195,7 +195,6 @@ describe("GET /api/articles/:article_id", () => {
           })
       })
     })
-  
 
     describe(" GET /api/articles/:article_id/comments", ()=>{
       test("200: Responds with an array of comments for the given article_id",()=>{
@@ -260,20 +259,12 @@ describe("GET /api/articles/:article_id", () => {
       test("POST 400: responds with bad request article_id is invalid ", () => {
         return request(app)
         .post(`/api/articles/notANumber/comments`)
-        .send({name: "butter_bridge", title: "Great read, but i do have a few points..."})
+        .send({username: "butter_bridge", body: "Great read, but i do have a few points..."})
           .expect(400)
           .then(({ body }) => {
             expect(body.msg).toBe("bad request");
           })
       })
-      test("POST 404: responds with 'not found' when the article_id is not in the database ", () => {
-        return request(app)
-          .get("/api/articles/900/comments")
-          .expect(404)
-          .then(({ body }) => {
-            expect(body.msg).toBe("not found");
-          });
-        })
       test("POST 400: responds with bad request when the response body doesn't contain the correct fields of username and body ", () => {
         return request(app)
         .post(`/api/articles/2/comments`)
@@ -283,4 +274,28 @@ describe("GET /api/articles/:article_id", () => {
             expect(body.msg).toBe("bad request");
           })
       })
+    })
+
+    describe("DELETE /api/comments/:comment_id", ()=>{
+      test("204: Deletes the comment at the given comment_id and responds with no content", ()=>{
+        return request(app)
+        .delete("/api/comments/1")
+        .expect(204, "")
+      })
+      test("DELETE 404: responds with 'not found' when the comment_id is not in the database ", () => {
+        return request(app)
+          .delete("/api/comments/895")
+          .expect(404)
+          .then(({ body }) => {
+            expect(body.msg).toBe("not found");
+          });
+        })
+        test("DELETE 400: responds with bad request comment_id is invalid ", () => {
+          return request(app)
+          .delete(`/api/comments/notANumber`)
+            .expect(400)
+            .then(({ body }) => {
+              expect(body.msg).toBe("bad request");
+            })
+        })
     })
