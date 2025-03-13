@@ -20,7 +20,7 @@ describe("/api/notAPath", () => {
       .get("/api/treasure")
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("path not found");
+        expect(body.msg).toBe("not found");
       });
   });
 });
@@ -146,10 +146,30 @@ describe("GET /api/articles/:article_id", () => {
       });
       test("GET 400: responds with bad request when order parameter input doesn't exist", () => {
         return request(app)
-          .get("/api/articles?order=DROP_TABLE_IF_EXISTS")
+          .get("/api/articles?order=pink")
           .expect(400)
           .then(({ body }) => {
             expect(body.msg).toBe("bad request");
+          });
+      });
+      test("200: Responds with an array of articles that have the given topic", ()=>{
+        return request(app)
+        .get(`/api/articles?topic=cats`)
+        .expect(200)
+        .then(({body})=>{
+          const articles = body.articles
+          expect(articles.length).toBe(1)
+          articles.forEach((article)=>{
+            expect(article.topic).toBe("cats")
+          })
+        })
+      })
+      test("GET 404: responds with not found when topic value doesn't exist in the data", () => {
+        return request(app)
+          .get("/api/articles?topic=boo")
+          .expect(404)
+          .then(({ body }) => {
+            expect(body.msg).toBe("not found");
           });
       });
     })
@@ -250,7 +270,7 @@ describe("GET /api/articles/:article_id", () => {
           })
         })
       })
-      test("GET 400: responds with bad request", () => {
+      test("GET 400: responds with bad request when the given article_id is invalid type", () => {
         return request(app)
           .get("/api/articles/notanumber/comments")
           .expect(400)
@@ -258,7 +278,7 @@ describe("GET /api/articles/:article_id", () => {
             expect(body.msg).toBe("bad request");
           })
       })
-      test("GET 404: responds with 'not found' ", () => {
+      test("GET 404: responds with 'not found' when the article_id is valid type but not in the database ", () => {
         return request(app)
           .get("/api/articles/900/comments")
           .expect(404)

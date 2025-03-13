@@ -22,7 +22,7 @@ app.get(`/api/users`, getAllUsers)
 
 
 app.all("*", (request, response) => {
-    response.status(404).send({ msg: "path not found" });
+    response.status(404).send({ msg: "not found" });
   });
 
 
