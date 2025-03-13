@@ -123,6 +123,35 @@ describe("GET /api/articles/:article_id", () => {
           })
         })
       })
+      test("200: Responds with an array of articles sorted by any valid coloumn and ordered", ()=>{
+        return request(app)
+        .get(`/api/articles?sort_by=title&order=asc`)
+        .expect(200)
+        .then(({body})=>{
+          const articles = body.articles
+          expect(articles.length).toBe(13)
+          expect(articles).toBeSortedBy('title', {
+            descending: false,
+          });
+        })
+    
+      })
+      test("GET 400: responds with bad request when sort_by parameter input doesn't exist", () => {
+        return request(app)
+          .get("/api/articles?sort_by=DROP_TABLE_IF_EXISTS")
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).toBe("bad request");
+          });
+      });
+      test("GET 400: responds with bad request when order parameter input doesn't exist", () => {
+        return request(app)
+          .get("/api/articles?order=DROP_TABLE_IF_EXISTS")
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).toBe("bad request");
+          });
+      });
     })
 
     describe("PATCH /api/articles/:article_id", ()=>{

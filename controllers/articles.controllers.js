@@ -14,8 +14,9 @@ const getArticleByArticleId = (request, response, next) =>{
 }
 
 const getAllArticles = (request, response, next) =>{
-
-    retreiveAllArticles().then((articles)=>{
+const sortByQuery = request.query.sort_by
+const  order = request.query.order
+    retreiveAllArticles(sortByQuery, order).then((articles)=>{
     response.status(200).send({articles})
 })
 .catch((err)=>{
