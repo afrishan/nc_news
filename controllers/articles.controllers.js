@@ -1,6 +1,7 @@
 
 const { get } = require("../app")
 const articles = require("../db/data/test-data/articles")
+const { checkExists } = require("../db/seeds/utils")
 const { retrieveArticleByArticleId, retreiveAllArticles, updateArticleByArticleId } = require("../models/articles.models")
 
 
@@ -16,7 +17,15 @@ const getArticleByArticleId = (request, response, next) =>{
 const getAllArticles = (request, response, next) =>{
 const sortByQuery = request.query.sort_by
 const  order = request.query.order
-    retreiveAllArticles(sortByQuery, order).then((articles)=>{
+const topicQuery = request.query.topic
+    
+const promises = [retreiveAllArticles(sortByQuery, order, topicQuery)]
+
+if(topicQuery){
+    promises.push(checkExists("articles", "topic", topicQuery))
+}
+
+Promise.all(promises).then(([articles])=>{
     response.status(200).send({articles})
 })
 .catch((err)=>{

@@ -11,14 +11,20 @@ return db.query(`SELECT * FROM articles WHERE article_id = $1`, [id])
 }) 
 }
 
-const retreiveAllArticles = (sortByQuery, order)=>{
+const retreiveAllArticles = (sortByQuery, order, topicQuery)=>{
 
 let queryString = 
 `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COALESCE(COUNT(comments.comment_id), 0) AS comment_count
     FROM articles 
-    LEFT JOIN comments ON comments.article_id = articles.article_id 
-    GROUP BY articles.article_id`
+    LEFT JOIN comments ON comments.article_id = articles.article_id`
 
+const inputTopic = []
+if (topicQuery) {
+    queryString += ` WHERE articles.topic = $1`;
+    inputTopic.push(topicQuery)
+  }
+
+queryString +=  ` GROUP BY articles.article_id`
 const querySort = sortByQuery || "created_at"
 
 const validColumns = ["author", "title", "article_id", "topic", "created_at", "votes", "article_img_url"]
@@ -45,9 +51,9 @@ if (validOrder.includes(order)) {
     queryString += ` ${queryOrder}`
 }
 }
-
-return db.query(queryString)
+return db.query(queryString, inputTopic)
 .then(({rows})=>{
+    
     return rows
 })
 }
