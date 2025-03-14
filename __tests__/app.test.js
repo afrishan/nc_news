@@ -53,7 +53,7 @@ describe("GET /api/topics", () => {
 });
 
 describe("GET /api/articles/:article_id", () => {
-  test.only("200: Responds with an object containing information of the article that has the requested id", () => {
+  test("200: Responds with an object containing information of the article that has the requested id", () => {
     return request(app)
       .get(`/api/articles/1`)
       .expect(200)
