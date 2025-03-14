@@ -1,5 +1,3 @@
-
-const { get } = require("../app")
 const articles = require("../db/data/test-data/articles")
 const { checkExists } = require("../db/seeds/utils")
 const { retrieveArticleByArticleId, retreiveAllArticles, updateArticleByArticleId } = require("../models/articles.models")
