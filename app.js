@@ -40,4 +40,8 @@ app.all("*", (request, response) => {
     next(err);
   });
 
+  app.use((err, req, res, next) => {
+    res.status(500).send({ message: "Internal Server Error" });
+  });
+
   module.exports = app
