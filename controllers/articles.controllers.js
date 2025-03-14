@@ -10,7 +10,6 @@ const getArticleByArticleId = (request, response, next) =>{
     retrieveArticleByArticleId(id).then((article)=>{
     response.status(200).send({article})
 }).catch((err)=>{
-    console.log(err)
     next(err)
 })
 }
